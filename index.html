@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#0d47a1" />
+  <title>Chadwell Supply Mobile</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div id="app">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Customer Mobile Portal</p>
+        <h1>Chadwell Supply</h1>
+      </div>
+      <button id="installBtn" class="ghost hidden">Install</button>
+    </header>
+
+    <main class="shell">
+      <section id="loginView" class="view active">
+        <div class="hero card">
+          <div>
+            <p class="eyebrow">Faster field ordering</p>
+            <h2>Order, report damages, and track requests on the go.</h2>
+            <p class="muted">Built for apartment teams, maintenance crews, and purchasing staff.</p>
+          </div>
+        </div>
+
+        <form id="loginForm" class="card form-grid">
+          <h3>Sign in</h3>
+          <label>
+            Full Name
+            <input type="text" id="userName" placeholder="Jordan Smith" required />
+          </label>
+          <label>
+            Business / Property
+            <input type="text" id="businessName" placeholder="Oak Ridge Apartments" required />
+          </label>
+          <label>
+            Email
+            <input type="email" id="userEmail" placeholder="name@company.com" required />
+          </label>
+          <label>
+            Location / Branch
+            <select id="defaultBranch">
+              <option>Columbus</option>
+              <option>Cincinnati</option>
+              <option>Cleveland</option>
+              <option>Indianapolis</option>
+              <option>Louisville</option>
+              <option>Custom</option>
+            </select>
+          </label>
+          <label id="customBranchWrap" class="hidden">
+            Custom Branch
+            <input type="text" id="customBranch" placeholder="Your local branch" />
+          </label>
+          <button type="submit" class="primary">Enter Portal</button>
+        </form>
+      </section>
+
+      <section id="portalView" class="view">
+        <div class="welcome card compact">
+          <div>
+            <p class="eyebrow">Welcome back</p>
+            <h2 id="welcomeText">Customer</h2>
+            <p class="muted" id="subWelcome">Ready to place an order.</p>
+          </div>
+          <button id="logoutBtn" class="ghost">Log out</button>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat card compact"><span>Open Orders</span><strong id="openOrdersCount">0</strong></div>
+          <div class="stat card compact"><span>Return Requests</span><strong id="returnCount">0</strong></div>
+          <div class="stat card compact"><span>Saved Locations</span><strong id="locationCount">0</strong></div>
+        </div>
+
+        <nav class="tabs">
+          <button class="tab active" data-tab="dashboardTab">Dashboard</button>
+          <button class="tab" data-tab="orderTab">Quick Order</button>
+          <button class="tab" data-tab="returnsTab">Damages / Returns</button>
+          <button class="tab" data-tab="locationsTab">Locations</button>
+          <button class="tab" data-tab="trackingTab">Tracking</button>
+          <button class="tab" data-tab="apiTab">ERP / API</button>
+        </nav>
+
+        <section id="dashboardTab" class="tab-panel active">
+          <div class="card">
+            <h3>Fast actions</h3>
+            <div class="action-grid">
+              <button class="action-btn" data-jump="orderTab">+ New Order</button>
+              <button class="action-btn" data-jump="returnsTab">+ Report Damage</button>
+              <button class="action-btn" data-jump="locationsTab">+ Add Property</button>
+              <button class="action-btn" data-jump="trackingTab">View Status</button>
+            </div>
+          </div>
+          <div class="card">
+            <h3>Recent activity</h3>
+            <div id="recentActivity" class="stack"></div>
+          </div>
+        </section>
+
+        <section id="orderTab" class="tab-panel">
+          <form id="orderForm" class="card form-grid">
+            <div class="row-between">
+              <h3>Quick Order</h3>
+              <button type="button" id="scanSkuBtn" class="ghost">Scan SKU</button>
+            </div>
+            <label>
+              Ordering Business / Property
+              <select id="orderLocation"></select>
+            </label>
+            <label>
+              Contact Name
+              <input type="text" id="orderContact" placeholder="On-site contact" required />
+            </label>
+            <label>
+              SKU / Item Number
+              <input type="text" id="orderSku" placeholder="Example: 123456" required />
+            </label>
+            <label>
+              Product Name
+              <input type="text" id="orderProduct" placeholder="Tub drain assembly" required />
+            </label>
+            <div class="two-col">
+              <label>
+                Quantity
+                <input type="number" id="orderQty" min="1" value="1" required />
+              </label>
+              <label>
+                Needed By
+                <input type="date" id="orderDate" required />
+              </label>
+            </div>
+            <label>
+              Delivery Priority
+              <select id="orderPriority">
+                <option>Standard</option>
+                <option>Rush</option>
+                <option>Emergency</option>
+              </select>
+            </label>
+            <label>
+              Notes
+              <textarea id="orderNotes" rows="4" placeholder="Gate code, unit number, special handling..."></textarea>
+            </label>
+            <button type="submit" class="primary">Submit Order</button>
+          </form>
+        </section>
+
+        <section id="returnsTab" class="tab-panel">
+          <form id="returnForm" class="card form-grid">
+            <h3>Damage / Return Report</h3>
+            <label>
+              Business / Property
+              <select id="returnLocation"></select>
+            </label>
+            <div class="two-col">
+              <label>
+                Order Number
+                <input type="text" id="returnOrderNumber" placeholder="Optional if known" />
+              </label>
+              <label>
+                SKU / Item Number
+                <input type="text" id="returnSku" placeholder="123456" required />
+              </label>
+            </div>
+            <label>
+              Product Name
+              <input type="text" id="returnProduct" placeholder="Part or product name" required />
+            </label>
+            <label>
+              Issue Type
+              <select id="returnReason">
+                <option>Damaged in transit</option>
+                <option>Wrong item received</option>
+                <option>Defective product</option>
+                <option>Over shipment</option>
+                <option>Customer return</option>
+              </select>
+            </label>
+            <label>
+              Description
+              <textarea id="returnDescription" rows="4" placeholder="Tell us what happened..."></textarea>
+            </label>
+            <label>
+              Add Photos
+              <input type="file" id="returnPhotos" accept="image/*" multiple />
+            </label>
+            <div id="photoPreview" class="photo-grid"></div>
+            <button type="submit" class="primary">Send Report</button>
+          </form>
+        </section>
+
+        <section id="locationsTab" class="tab-panel">
+          <form id="locationForm" class="card form-grid">
+            <h3>Add Business / Property</h3>
+            <label>
+              Business / Property Name
+              <input type="text" id="locationName" placeholder="Oak Ridge Apartments" required />
+            </label>
+            <label>
+              Street Address
+              <input type="text" id="locationAddress" placeholder="123 Main St" required />
+            </label>
+            <div class="two-col">
+              <label>
+                City
+                <input type="text" id="locationCity" placeholder="Columbus" required />
+              </label>
+              <label>
+                State
+                <input type="text" id="locationState" placeholder="OH" required />
+              </label>
+            </div>
+            <div class="two-col">
+              <label>
+                ZIP
+                <input type="text" id="locationZip" placeholder="43215" required />
+              </label>
+              <label>
+                Preferred Branch
+                <select id="locationBranch">
+                  <option>Auto-route by ZIP</option>
+                  <option>Columbus</option>
+                  <option>Cincinnati</option>
+                  <option>Cleveland</option>
+                  <option>Indianapolis</option>
+                  <option>Louisville</option>
+                </select>
+              </label>
+            </div>
+            <button type="submit" class="primary">Save Location</button>
+          </form>
+          <div class="card">
+            <h3>Saved Locations</h3>
+            <div id="savedLocations" class="stack"></div>
+          </div>
+        </section>
+
+        <section id="trackingTab" class="tab-panel">
+          <div class="card">
+            <h3>Live Order Status</h3>
+            <p class="muted">Demo statuses update locally to show how live order tracking could look once tied into Chadwell systems.</p>
+            <div id="trackingList" class="stack"></div>
+          </div>
+        </section>
+
+        <section id="apiTab" class="tab-panel">
+          <div class="card">
+            <h3>ERP / API Connection Ready</h3>
+            <p class="muted">This section is built so a developer can swap demo storage for Chadwell order APIs, customer accounts, and branch routing logic.</p>
+            <div class="stack mono small">
+              <div>POST /api/login</div>
+              <div>POST /api/orders</div>
+              <div>POST /api/returns</div>
+              <div>GET /api/orders/status</div>
+              <div>GET /api/branches?zip=43215</div>
+              <div>GET /api/customer/locations</div>
+            </div>
+            <button id="exportDataBtn" class="primary" type="button">Export Demo Data</button>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <div id="scannerModal" class="modal hidden">
+      <div class="modal-content card">
+        <div class="row-between">
+          <h3>Scan SKU</h3>
+          <button id="closeScannerBtn" class="ghost" type="button">Close</button>
+        </div>
+        <p class="muted">Uses your camera when supported. On iPhone/Safari, type the SKU if camera scanning is unavailable.</p>
+        <video id="scannerVideo" autoplay playsinline></video>
+        <div class="row-between mt8">
+          <input type="text" id="manualSku" placeholder="Or enter SKU manually" />
+          <button id="useManualSkuBtn" class="primary" type="button">Use</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="toast" class="toast hidden"></div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

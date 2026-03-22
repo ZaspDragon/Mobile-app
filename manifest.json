@@ -1,0 +1,9 @@
+{
+  "name": "Chadwell Supply Mobile",
+  "short_name": "Chadwell Mobile",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#eef4ff",
+  "theme_color": "#0d47a1",
+  "icons": []
+}
